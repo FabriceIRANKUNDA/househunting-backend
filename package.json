@@ -1,0 +1,56 @@
+{
+  "name": "isuzume-api",
+  "version": "1.0.0",
+  "description": "this platfoam is for provisional driving test licence ",
+  "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
+  "scripts": {
+    "start": "babel-node ./src/index.js",
+    "dev-server": "nodemon --exec babel-node ./src/index.js",
+    "prod-server": "SET NODE_ENV=production & nodemon --exec babel-node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yamuben/Iszuzume-API.git"
+  },
+  "author": "Yamu & Fab & Victor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yamuben/Iszuzume-API/issues"
+  },
+  "homepage": "https://github.com/yamuben/Iszuzume-API#readme",
+  "dependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.12.10",
+    "@types/node": "^14.14.22",
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.9.0",
+    "generate-password": "^1.6.0",
+    "helmet": "^4.3.1",
+    "http-status": "^1.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.13",
+    "nodemailer": "^6.4.17",
+    "pg": "^8.5.1",
+    "qs": "^6.9.6",
+    "raw-body": "^2.4.1",
+    "short-unique-id": "^3.2.3",
+    "uuid": "^8.3.2",
+    "validator": "^13.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
