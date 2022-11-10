@@ -1,7 +1,4 @@
-import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import bcrypt from "bcrypt";
 /**
  * @export
  * @class HashedPassword

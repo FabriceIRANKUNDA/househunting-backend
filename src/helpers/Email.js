@@ -1,12 +1,6 @@
-import dotenv from "dotenv";
 import TokenAuthenticator from "./TokenAuthenticator";
 
-dotenv.config();
-const {
-  EMAIL_ADDRESS,
-  WEB_BASE_URL,
-  BASE_URL_PATH,
-} = process.env;
+const { EMAIL_ADDRESS, WEB_BASE_URL, BASE_URL_PATH } = process.env;
 
 /**
  * @export
@@ -48,7 +42,7 @@ class Email {
     };
   }
 
-    /**
+  /**
    * register a new admin
    * @static
    * @param {Object} req request object
@@ -89,7 +83,7 @@ class Email {
     };
   }
 
-    /**
+  /**
    * register a new student
    * @static
    * @param {Object} req request object

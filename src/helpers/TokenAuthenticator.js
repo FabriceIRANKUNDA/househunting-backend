@@ -1,8 +1,4 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
+import jwt from "jsonwebtoken";
 /**
  * @export
  * @class TokenAuthenticator

@@ -23,10 +23,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "student",
   },
-  test: [
+  preferences: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: "Tests",
+      ref: "Preference",
     },
   ],
   password: {
@@ -47,10 +47,10 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "test",
+    path: "preferences",
   });
   next();
 });
 
-const Users = mongoose.model("Users", userSchema);
-export default Users;
+const User = mongoose.model("User", userSchema);
+export default User;
