@@ -18,7 +18,7 @@ const houseSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    price: {
+    priceMonthly: {
       type: Number,
       required: [true, "A house must have a price"],
     },
@@ -47,7 +47,7 @@ const houseSchema = new mongoose.Schema(
     },
     visible: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     location: {
       type: {
@@ -57,14 +57,11 @@ const houseSchema = new mongoose.Schema(
       },
       coordinates: [Number],
       address: String,
-      description: String,
     },
-    postedBy: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "User",
-      },
-    ],
+    postedBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
   },
   {
     toJSON: { virtuals: true },

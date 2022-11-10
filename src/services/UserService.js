@@ -21,14 +21,14 @@ class UserService {
   };
 
   static updateUser = async (req) => {
-    const doc = await User.findByIdAndUpdate(req.params.id, req.body, {
+    return await User.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
       new: true,
     });
   };
 
   static deleteUser = async (req) => {
-    const doc = await User.findByIdAndDelete(req.params.id);
+    return await User.findByIdAndDelete(req.params.id);
   };
 }
 

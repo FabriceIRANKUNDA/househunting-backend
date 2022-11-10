@@ -21,14 +21,14 @@ class HouseService {
   };
 
   static updateHouse = async (req) => {
-    const doc = await House.findByIdAndUpdate(req.params.id, req.body, {
+    return await House.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
       new: true,
     });
   };
 
   static deleteHouse = async (req) => {
-    const doc = await House.findByIdAndDelete(req.params.id);
+    return await House.findByIdAndDelete(req.params.id);
   };
 }
 
