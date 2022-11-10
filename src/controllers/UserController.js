@@ -3,6 +3,7 @@ import Response from "../helpers/Response";
 import httpStatus from "http-status";
 import catchAsyncErr from "../helpers/catchAsyncError";
 import userService from "../services/UserService";
+import AppError from "../helpers/appError";
 
 class UserController {
   static getAllUsers = catchAsyncErr(async (req, res, next) => {
@@ -18,7 +19,7 @@ class UserController {
   });
 
   static createUser = catchAsyncErr(async (req, res, next) => {
-    await userService.createUser(req);
+    const user = await userService.createUser(req);
     return Response.successMessage(
       res,
       "user created successfuly!",

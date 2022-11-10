@@ -3,6 +3,7 @@ import Response from "../helpers/Response";
 import httpStatus from "http-status";
 import catchAsyncErr from "../helpers/catchAsyncError";
 import HouseService from "../services/HouseService";
+import AppError from "../helpers/appError";
 
 class HouseController {
   static getAllHouses = catchAsyncErr(async (req, res, next) => {
@@ -18,7 +19,7 @@ class HouseController {
   });
 
   static createHouse = catchAsyncErr(async (req, res, next) => {
-    await HouseService.createHouse(req);
+    const houses = await HouseService.createHouse(req);
 
     return Response.successMessage(
       res,
