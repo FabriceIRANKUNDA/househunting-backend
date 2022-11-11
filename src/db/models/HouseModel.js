@@ -9,7 +9,6 @@ const houseSchema = new mongoose.Schema(
     },
     bathRooms: {
       type: Number,
-      required: [true, "A house must have a rooms"],
     },
     ratingsAverage: {
       type: Number,
