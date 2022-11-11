@@ -1,10 +1,13 @@
 import express from "express";
 import authController from "../controllers/AuthController";
 import userController from "../controllers/UserController";
+import verifyEmail from "../middlewares/verifyToken";
 
 const router = express.Router();
 
 router.post("/signup", authController.signup);
+router.post("/verifyEmail", verifyEmail, authController.verifyEmail);
+router.get("/resendOTP", verifyEmail, authController.resendOTP);
 
 router
   .route("/")

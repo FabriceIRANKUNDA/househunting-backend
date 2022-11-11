@@ -9,7 +9,12 @@ const isUserExist = async (req, res, next) => {
       req.header("x-auth-token") ||
       req.params["x-auth-token"] ||
       req.params["token"] ||
-      req.query["token"];
+      req.query["token"] ||
+      (req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer"))
+        ? req.headers.authorization.split(" ")[1]
+        : undefined;
+
     if (!token) {
       return Response.errorMessage(
         res,
@@ -30,7 +35,7 @@ const isUserExist = async (req, res, next) => {
     if (name === "TokenExpiredError") {
       return Response.errorMessage(
         res,
-        "Unauthorized, Token has expired signin again to get new tokenn",
+        "Unauthorized, Token has expired signin again to get new token",
         HttpStatus.UNAUTHORIZED
       );
     }
@@ -38,6 +43,7 @@ const isUserExist = async (req, res, next) => {
     const validUser = await users.findOne({
       _id: payload._id,
     });
+
     if (!validUser) {
       return Response.errorMessage(
         res,

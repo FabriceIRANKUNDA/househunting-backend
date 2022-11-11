@@ -1,6 +1,9 @@
 import users from "../db/models/Users";
 import HashPassword from "../helpers/HashPassword";
 import TokenAuthenticator from "../helpers//TokenAuthenticator";
+import AppError from "../helpers/appError";
+import httpStatus from "http-status";
+import Email from "../helpers/Email";
 
 class AuthService {
   /**
@@ -11,21 +14,37 @@ class AuthService {
    * @returns {object} data
    */
   static async userSignup(req) {
-    const { firstName, lastName, email, phone, password } = req.body;
+    const { names, email, phone, password } = req.body;
     const hashedPassword = HashPassword.hashPassword(password);
+    const { OTP, otpExpires } = TokenAuthenticator.OTPGenerator();
     const newUserObject = {
-      // id: uuid(),
-      firstName,
-      lastName,
+      names,
       email,
       phone,
       password: hashedPassword,
-      role: "user",
       isVerified: false,
       isActive: true,
+      otp: OTP,
+      otpExpires,
     };
 
     const newUser = await users.create(newUserObject);
+    return newUser;
+  }
+
+  static async resendOTP(req) {
+    const { user } = req;
+    const { OTP, otpExpires } = TokenAuthenticator.OTPGenerator();
+
+    const newUser = await users.findById(user._id);
+    if (!newUser) return false;
+
+    newUser.otp = OTP;
+    newUser.otpExpires = otpExpires;
+    await newUser.save({ validateBeforeSave: false });
+
+    Email.verificationEmail(req, newUser);
+
     return newUser;
   }
 
@@ -56,7 +75,6 @@ class AuthService {
    */
   static async activateUser(req) {
     const { user, isActive } = req.body;
-    // const updateRoleObj = [{ role }, { where: { id: user } }];
     const newUser = await users.findOneAndUpdate(
       { _id: user },
       { isActive: isActive },
@@ -72,52 +90,24 @@ class AuthService {
    * @memberof AuthService
    * @returns {object} data
    */
-  static async verifyUser(req) {
-    const { user, isVerified } = req.body;
-    // const updateRoleObj = [{ role }, { where: { id: user } }];
-    const newUser = await users.findOneAndUpdate(
-      { _id: user },
-      { isVerified: isVerified },
-      { runValidators: true }
-    );
-    return newUser;
-  }
+  static async verifyUser(req, next) {
+    const { otp } = req.body;
+    const { user } = req;
 
-  /**
-   * Admin add other admins
-   * @static
-   * @param {object} req  request object
-   * @memberof AuthService
-   * @returns {object} data
-   */
-  static async inviteUser(req) {
-    const { email, firstName, lastName, phone, password, role } = req.body;
-    const hashedPassword = HashPassword.hashPassword(password);
-    const newUserObject = {
-      // id: uuid(),
-      firstName,
-      lastName,
-      email,
-      phone,
-      password: hashedPassword,
-      role,
-      is_verified: true,
-      is_active: true,
-    };
-    const newUser = await users.create(newUserObject);
-    return newUser;
-  }
+    const newUser = await users.findOne({
+      _id: user._id,
+      otp,
+      otpExpires: { $gt: Date.now() },
+    });
 
-  /**
-   * Admin view users
-   * @static
-   * @param {object} req  request object
-   * @memberof AuthService
-   * @returns {object} data
-   */
-  static async viewUsers(req) {
-    const allUsers = await users.find();
-    return allUsers;
+    if (!newUser) return false;
+
+    newUser.isVerified = true;
+    newUser.otp = undefined;
+    newUser.otpExpires = undefined;
+    await newUser.save({ validateBeforeSave: false });
+
+    return true;
   }
 
   /**

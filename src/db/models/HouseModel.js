@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 
 const houseSchema = new mongoose.Schema(
   {
-    numOfRooms: {
+    bedRooms: {
+      type: Number,
+      required: [true, "A house must have a rooms"],
+    },
+    bathRooms: {
       type: Number,
       required: [true, "A house must have a rooms"],
     },
@@ -13,6 +17,11 @@ const houseSchema = new mongoose.Schema(
       min: [1, "Rating must be above 1.0"],
       max: [5, "Rating must be below 5.0"],
       set: (val) => Math.round(val * 10) / 10,
+    },
+    wifi: Boolean,
+    available: {
+      type: Boolean,
+      default: true,
     },
     ratingsQuantity: {
       type: Number,
@@ -58,6 +67,13 @@ const houseSchema = new mongoose.Schema(
       coordinates: [Number],
       address: String,
     },
+    ownerInfo: {
+      phone: {
+        type: String,
+        required: [true, "Owner's phone number is required"],
+      },
+      names: String,
+    },
     postedBy: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
@@ -73,7 +89,7 @@ houseSchema.index({ price: 1, ratingsAverage: -1 });
 houseSchema.index({ location: "2dsphere" });
 
 houseSchema.pre(/^find/, function (next) {
-  this.find({ visible: { $ne: false } });
+  this.find({ visible: { $ne: false }, available: { $ne: false } });
   next();
 });
 

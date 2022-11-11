@@ -2,19 +2,21 @@ import TokenAuthenticator from "../helpers//TokenAuthenticator";
 import Response from "../helpers/Response";
 import httpStatus from "http-status";
 import AuthService from "../services/AuthService";
-import EmailTemplate from "../helpers/EmailTemplate";
-import passwordGenerator from 'generate-password';
+import Email from "../helpers/Email";
+import passwordGenerator from "generate-password";
+import catchAsyncError from "../helpers/catchAsyncError";
+import AppError from "../helpers/appError";
 
 class AuthController {
-
-  static async signup(req, res) {
+  static signup = catchAsyncError(async (req, res, next) => {
     const newUser = await AuthService.userSignup(req);
-    newUser.password='';
+    newUser.password = "";
     const { password, ...data } = newUser;
     const token = TokenAuthenticator.tokenGenerator(data._doc);
     data.token = token;
-// fix this email issues victor
-    EmailTemplate.verificationEmail(req, data._doc);
+
+    const response = await Email.verificationEmail(req, data._doc);
+    console.log(response);
 
     Response.successMessage(
       res,
@@ -22,12 +24,44 @@ class AuthController {
       { token },
       httpStatus.CREATED
     );
-  }
+  });
+
+  static verifyEmail = catchAsyncError(async (req, res, next) => {
+    const verified = await AuthService.verifyUser(req);
+
+    if (!verified) {
+      return next(
+        new AppError(httpStatus.BAD_REQUEST, "Invalid code or has expired!.")
+      );
+    }
+    return Response.successMessage(
+      res,
+      "Email verified successfuly!",
+      null,
+      httpStatus.OK
+    );
+  });
+
+  static resendOTP = catchAsyncError(async (req, res, next) => {
+    const sent = await AuthService.resendOTP(req);
+
+    if (!sent) {
+      return next(
+        new AppError(httpStatus.BAD_REQUEST, "Sending new OTP failed!.")
+      );
+    }
+    return Response.successMessage(
+      res,
+      "Email sent successfuly!",
+      null,
+      httpStatus.OK
+    );
+  });
 
   static async login(req, res) {
     const { result } = req;
 
-    result.password="";
+    result.password = "";
     const { password: pwd, ...data } = result;
     const token = TokenAuthenticator.signToken(data._doc);
     return Response.successMessage(
@@ -44,7 +78,7 @@ class AuthController {
     return Response.successMessage(
       res,
       "Role assigned successfully",
-      '',
+      "",
       httpStatus.OK
     );
   }
@@ -54,7 +88,7 @@ class AuthController {
     return Response.successMessage(
       res,
       "User activated successfully",
-      '',
+      "",
       httpStatus.OK
     );
   }
@@ -64,24 +98,30 @@ class AuthController {
     return Response.successMessage(
       res,
       "User verified successfully",
-      '',
+      "",
       httpStatus.OK
     );
   }
 
   static async inviteUser(req, res) {
-    const newPassword =  passwordGenerator.generate({length: 10, uppercase: true, lowercase:true, numbers: true, symbols: true})
+    const newPassword = passwordGenerator.generate({
+      length: 10,
+      uppercase: true,
+      lowercase: true,
+      numbers: true,
+      symbols: true,
+    });
     req.body.password = newPassword;
     const newUser = await AuthService.inviteUser(req);
     const { password, ...data } = newUser;
-    data._doc.password="";
+    data._doc.password = "";
     const token = TokenAuthenticator.tokenGenerator(data._doc);
     data.token = token;
-    
+
     //Victor
 
     await EmailTemplate.newUserEmail(req, data._doc, newPassword);
-    
+
     return Response.successMessage(
       res,
       "Invitation has been sent successfully!",
@@ -91,7 +131,6 @@ class AuthController {
   }
 
   static async viewUsers(req, res) {
-
     const users = await AuthService.viewUsers(req);
 
     return Response.successMessage(
@@ -111,6 +150,5 @@ class AuthController {
       httpStatus.OK
     );
   }
-
 }
 export default AuthController;

@@ -2,11 +2,7 @@ import validator from "validator";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    default: "",
-  },
-  lastName: {
+  names: {
     type: String,
     default: "",
   },
@@ -23,6 +19,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "student",
   },
+  isVerified: Boolean,
+  isActive: Boolean,
+  otp: String,
+  otpExpires: Date,
   preferences: [
     {
       type: mongoose.Schema.ObjectId,
@@ -45,12 +45,12 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: "preferences",
-  });
-  next();
-});
+// userSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: "preferences",
+//   });
+//   next();
+// });
 
 const User = mongoose.model("User", userSchema);
 export default User;
