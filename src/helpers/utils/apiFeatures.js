@@ -33,9 +33,7 @@ class APIfeatures {
       const limitByFields = this.queryString.fields.split(",").join(" ");
       this.query = this.query.select(limitByFields);
     } else {
-      this.query = this.query.select(
-        "-__v -questionsAndAnswers -createdOn -isAttempted -smsCode"
-      );
+      this.query = this.query.select("-__v");
     }
     return this;
   }
