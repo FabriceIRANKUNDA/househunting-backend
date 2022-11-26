@@ -8,11 +8,12 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: [true, "Email must be unique"],
     validate: [validator.isEmail, "Please provide valid email"],
   },
   phone: {
     type: String,
-    unique: true,
+    unique: [true, "Phone must be unique"],
     required: [true, " Phone number is required"],
   },
   role: {

@@ -25,6 +25,9 @@ app.use(bodyParser.text({ limit: "50mb" }));
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
 
+app.get("/", (req, res) => {
+  res.send({ message: "thank you for your request" });
+});
 app.use("/api/v1/houses", houseRouter);
 app.use("/api/v1/users", userRouter);
 

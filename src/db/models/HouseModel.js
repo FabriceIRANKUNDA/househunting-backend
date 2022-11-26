@@ -1,4 +1,3 @@
-import validator from "validator";
 import mongoose from "mongoose";
 
 const houseSchema = new mongoose.Schema(
