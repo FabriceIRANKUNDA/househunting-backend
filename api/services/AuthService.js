@@ -1,6 +1,6 @@
 import users from "../db/models/Users";
 import HashPassword from "../helpers/HashPassword";
-import TokenAuthenticator from "../helpers//TokenAuthenticator";
+import TokenAuthenticator from "../helpers/TokenAuthenticator";
 import AppError from "../helpers/appError";
 import httpStatus from "http-status";
 import Email from "../helpers/Email";

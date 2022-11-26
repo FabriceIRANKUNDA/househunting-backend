@@ -1,4 +1,4 @@
-import TokenAuthenticator from "../helpers//TokenAuthenticator";
+import TokenAuthenticator from "../helpers/TokenAuthenticator";
 import Response from "../helpers/Response";
 import httpStatus from "http-status";
 import AuthService from "../services/AuthService";
