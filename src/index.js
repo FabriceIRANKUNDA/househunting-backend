@@ -10,6 +10,7 @@ import compression from "compression";
 import globalErrorHandler from "./helpers/utils/errorController";
 import houseRouter from "./routes/houseRoutes";
 import userRouter from "./routes/userRoutes";
+import httpStatus from "http-status";
 dotenv.config({ path: "./config.env" });
 
 const app = express();
@@ -26,7 +27,7 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
 
 app.get("/", (req, res) => {
-  res.send({ message: "thank you for your request" });
+  res.json({ status: httpStatus.OK, message: "thank you for your request" });
 });
 app.use("/api/v1/houses", houseRouter);
 app.use("/api/v1/users", userRouter);
