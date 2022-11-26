@@ -7,9 +7,9 @@
     "node": "14.x"
   },
   "scripts": {
-    "start": "babel-node ./src/index.js",
-    "dev-server": "nodemon --exec babel-node ./src/index.js",
-    "prod-server": "SET NODE_ENV=production & nodemon --exec babel-node ./src/index.js"
+    "start": "babel-node ./api/index.js",
+    "dev-server": "nodemon --exec babel-node ./api/index.js",
+    "prod-server": "SET NODE_ENV=production & nodemon --exec babel-node ./api/index.js"
   },
   "repository": {
     "type": "git"
