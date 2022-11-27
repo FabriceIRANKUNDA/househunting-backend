@@ -1,57 +1,52 @@
 import validator from "validator";
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  names: {
-    type: String,
-    default: "",
-  },
-  email: {
-    type: String,
-    unique: [true, "Email must be unique"],
-    validate: [validator.isEmail, "Please provide valid email"],
-  },
-  phone: {
-    type: String,
-    unique: [true, "Phone must be unique"],
-    required: [true, " Phone number is required"],
-  },
-  role: {
-    type: String,
-    default: "student",
-  },
-  isVerified: Boolean,
-  isActive: Boolean,
-  otp: String,
-  otpExpires: Date,
-  preferences: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: "Preference",
+const userSchema = new mongoose.Schema(
+  {
+    names: {
+      type: String,
+      default: "",
     },
-  ],
-  password: {
-    type: String,
-    select: false,
+    email: {
+      type: String,
+      unique: [true, "Email must be unique"],
+      validate: [validator.isEmail, "Please provide valid email"],
+    },
+    phone: {
+      type: String,
+      unique: [true, "Phone must be unique"],
+      required: [true, " Phone number is required"],
+    },
+    role: {
+      type: String,
+      default: "student",
+    },
+    isVerified: Boolean,
+    isActive: Boolean,
+    otp: String,
+    otpExpires: Date,
+    password: {
+      type: String,
+      select: false,
+    },
+    isActive: Boolean,
+    isVerified: Boolean,
+    lookingForHouse: Boolean,
   },
-  isActive: Boolean,
-  isVerified: Boolean,
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    timestamps: true,
+  }
+);
 
-// userSchema.pre(/^find/, function (next) {
-//   this.populate({
-//     path: "preferences",
-//   });
-//   next();
-// });
+userSchema.methods.isCorrectPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model("User", userSchema);
 export default User;

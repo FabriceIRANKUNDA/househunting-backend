@@ -8,6 +8,7 @@ const router = express.Router();
 router.post("/signup", authController.signup);
 router.post("/verifyEmail", verifyEmail, authController.verifyEmail);
 router.get("/resendOTP", verifyEmail, authController.resendOTP);
+router.post("/login", authController.login);
 
 router
   .route("/")
