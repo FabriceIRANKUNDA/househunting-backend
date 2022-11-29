@@ -63,5 +63,33 @@ class UserController {
       httpStatus.OK
     );
   });
+
+  static createPreferences = catchAsyncErr(async (req, res, next) => {
+    const preferences = await userService.createPreferences(req);
+    return Response.successMessage(
+      res,
+      "preferences created successfuly!",
+      preferences,
+      httpStatus.CREATED
+    );
+  });
+
+  static updatePreferences = catchAsyncErr(async (req, res, next) => {
+    console.log("........................");
+    const data = await userService.updatePreferences(req);
+    if (!data)
+      return next(
+        new AppError(
+          httpStatus.NOT_FOUND,
+          "No preferences associated with the current user, please register preferences first"
+        )
+      );
+    return Response.successMessage(
+      res,
+      "preferences updated successfully",
+      data,
+      httpStatus.OK
+    );
+  });
 }
 export default UserController;

@@ -1,4 +1,5 @@
 import User from "../db/models/Users";
+import Preference from "../db/models/Preference";
 import APIfeatures from "../helpers/utils/apiFeatures";
 
 class UserService {
@@ -29,6 +30,18 @@ class UserService {
 
   static deleteUser = async (req) => {
     return await User.findByIdAndDelete(req.params.id);
+  };
+
+  static createPreferences = async (req) => {
+    req.body.user = req.user._id;
+    return await Preference.create(req.body);
+  };
+
+  static updatePreferences = async (req) => {
+    return await Preference.findOneAndUpdate({ user: req.user._id }, req.body, {
+      runValidators: true,
+      new: true,
+    });
   };
 }
 
