@@ -2,11 +2,23 @@ import mongoose from "mongoose";
 
 const preferenceSchema = new mongoose.Schema(
   {
-    priceRange: Number,
-    internet: {
-      type: String,
-      enum: ["CanaBox", "Liquid", "None"],
+    priceRange: {
+      min: {
+        type: Number,
+        default: 0,
+      },
+      max: {
+        type: Number,
+        default: 0,
+      },
     },
+    internet: [
+      {
+        type: String,
+        enum: ["CanalBox", "Liquid", "MTN", "None"],
+        default: ["None"],
+      },
+    ],
     location: String,
     numOfBedRooms: Number,
     user: {
