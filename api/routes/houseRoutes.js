@@ -4,7 +4,7 @@ import protectedRoute from "../middlewares/verifyToken";
 
 const router = express.Router();
 
-router.use(protectedRoute);
+// router.use(protectedRoute);
 router
   .route("/")
   .get(houseController.getAllHouses)
