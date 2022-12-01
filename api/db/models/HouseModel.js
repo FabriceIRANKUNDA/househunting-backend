@@ -16,7 +16,13 @@ const houseSchema = new mongoose.Schema(
       max: [5, "Rating must be below 5.0"],
       set: (val) => Math.round(val * 10) / 10,
     },
-    wifi: Boolean,
+    internet: [
+      {
+        type: String,
+        enum: ["CanalBox", "Liquid", "MTN", "None"],
+        default: ["None"],
+      },
+    ],
     available: {
       type: Boolean,
       default: true,

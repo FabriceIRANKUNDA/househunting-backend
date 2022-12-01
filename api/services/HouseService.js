@@ -3,7 +3,7 @@ import APIfeatures from "../helpers/utils/apiFeatures";
 
 class HouseService {
   static createHouse = async (req) => {
-    req.body.postedBy = req.user._id;
+    req.body.postedBy = req?.user?._id;
     return await House.create(req.body);
   };
 
