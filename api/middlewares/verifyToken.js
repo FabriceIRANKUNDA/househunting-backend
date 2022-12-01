@@ -13,7 +13,8 @@ const protectedRoute = async (req, res, next) => {
       (req.headers.authorization &&
         req.headers.authorization.startsWith("Bearer"))
         ? req.headers.authorization.split(" ")[1]
-        : undefined;
+        : undefined ||
+        req.headers.authorization;
 
     if (!token) {
       return Response.errorMessage(
@@ -22,6 +23,7 @@ const protectedRoute = async (req, res, next) => {
         HttpStatus.NOT_FOUND
       );
     }
+
     const payload = TokenAuthenticator.decodeToken(token);
     const { name } = payload;
     if (name === "JsonWebTokenError") {
@@ -32,6 +34,8 @@ const protectedRoute = async (req, res, next) => {
       );
     }
 
+    
+    
     if (name === "TokenExpiredError") {
       return Response.errorMessage(
         res,
@@ -46,13 +50,13 @@ const protectedRoute = async (req, res, next) => {
         res,
         "You' re not authorized!",
         HttpStatus.UNAUTHORIZED
-      );
-    }
-    req.user = payload;
-    req.token = token;
-    next();
-  } catch (error) {
-    return Response.errorMessage(
+        );
+      }
+      req.user = payload;
+      req.token = token;
+      next();
+    } catch (error) {
+      return Response.errorMessage(
       res,
       "You can not proceed without setting a valid token",
       HttpStatus.INTERNAL_SERVER_ERROR
