@@ -1,8 +1,8 @@
 import users from "../db/models/Users";
 import HashPassword from "../helpers/HashPassword";
-import TokenAuthenticator from "../helpers//TokenAuthenticator";
+import TokenAuthenticator from "../helpers/TokenAuthenticator";
 import AppError from "../helpers/appError";
-import httpStatus from "http-status";
+import User from "../db/models/Users";
 import Email from "../helpers/Email";
 
 class AuthService {
@@ -140,5 +140,26 @@ class AuthService {
 
     return token;
   }
+
+  static login = async (req, next) => {
+    const { email, password } = req.body;
+
+    if (!email || !password)
+      return next(new AppError(400, "Please provide email and password"));
+
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return next(
+        new AppError(
+          404,
+          "Please make sure you have an account!, Go ahead to /signup"
+        )
+      );
+    }
+
+    if (!(await user.isCorrectPassword(password, user.password)))
+      return next(new AppError(401, "Incorrect email or Password"));
+    else return user;
+  };
 }
 export default AuthService;

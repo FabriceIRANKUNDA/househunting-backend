@@ -3,7 +3,7 @@ import TokenAuthenticator from "../helpers/TokenAuthenticator";
 import Response from "../helpers/Response";
 import HttpStatus from "http-status";
 
-const isUserExist = async (req, res, next) => {
+const protectedRoute = async (req, res, next) => {
   try {
     const token =
       req.header("x-auth-token") ||
@@ -43,11 +43,8 @@ const isUserExist = async (req, res, next) => {
         HttpStatus.UNAUTHORIZED
       );
     }
-    
-    const validUser = await users.findOne({
-      _id: payload._id,
-    });
-    
+
+    const validUser = await users.findById(payload._id);
     if (!validUser) {
       return Response.errorMessage(
         res,
@@ -66,4 +63,4 @@ const isUserExist = async (req, res, next) => {
     );
   }
 };
-export default isUserExist;
+export default protectedRoute;

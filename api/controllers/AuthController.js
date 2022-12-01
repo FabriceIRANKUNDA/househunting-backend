@@ -1,4 +1,4 @@
-import TokenAuthenticator from "../helpers//TokenAuthenticator";
+import TokenAuthenticator from "../helpers/TokenAuthenticator";
 import Response from "../helpers/Response";
 import httpStatus from "http-status";
 import AuthService from "../services/AuthService";
@@ -16,7 +16,6 @@ class AuthController {
     data.token = token;
 
     const response = await Email.verificationEmail(req, data._doc);
-    console.log(response);
 
     Response.successMessage(
       res,
@@ -58,19 +57,21 @@ class AuthController {
     );
   });
 
-  static async login(req, res) {
-    const { result } = req;
+  static login = catchAsyncError(async (req, res, next) => {
+    const result = await AuthService.login(req, next);
+    result.password = undefined;
+    const { password, ...data } = result;
 
-    result.password = "";
-    const { password: pwd, ...data } = result;
-    const token = TokenAuthenticator.signToken(data._doc);
-    return Response.successMessage(
-      res,
-      "Logged in successfully",
-      { token },
-      httpStatus.OK
-    );
-  }
+    if (result) {
+      const token = TokenAuthenticator.signToken(data._doc);
+      return Response.successMessage(
+        res,
+        "Logged in successfully",
+        { token },
+        httpStatus.OK
+      );
+    }
+  });
 
   static async assignRole(req, res) {
     await AuthService.assignRole(req);

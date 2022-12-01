@@ -1,4 +1,3 @@
-import validator from "validator";
 import mongoose from "mongoose";
 
 const houseSchema = new mongoose.Schema(
@@ -81,6 +80,7 @@ const houseSchema = new mongoose.Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
+    timestamps: true,
   }
 );
 

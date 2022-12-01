@@ -7,9 +7,9 @@
     "node": "^14.x"
   },
   "scripts": {
-    "start": "babel-node ./src/index.js",
-    "dev-server": "nodemon --exec babel-node ./src/index.js",
-    "prod-server": "SET NODE_ENV=production & nodemon --exec babel-node ./src/index.js"
+    "start": "babel-node ./api/index.js",
+    "dev-server": "nodemon --exec babel-node ./api/index.js",
+    "prod-server": "SET NODE_ENV=production & nodemon --exec babel-node ./api/index.js"
   },
   "repository": {
     "type": "git"
@@ -46,6 +46,7 @@
     "qs": "^6.9.6",
     "raw-body": "^2.4.1",
     "short-unique-id": "^3.2.3",
+    "socket.io": "^4.5.4",
     "uuid": "^8.3.2",
     "validator": "^13.5.2",
     "xss-clean": "^0.1.1"

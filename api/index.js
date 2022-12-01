@@ -10,9 +10,20 @@ import compression from "compression";
 import globalErrorHandler from "./helpers/utils/errorController";
 import houseRouter from "./routes/houseRoutes";
 import userRouter from "./routes/userRoutes";
+import httpStatus from "http-status";
+import http from "http";
+import socket from "socket.io";
+import WebSockets from "./helpers/utils/socket";
+
 dotenv.config({ path: "./config.env" });
 
 const app = express();
+const server = http.createServer(app);
+const io = socket(server, {
+  cors: {
+    origin: "*",
+  },
+});
 
 // Data sanitization against XSS(Cross-sites-scripting attacks)
 app.use(xss());
@@ -25,6 +36,12 @@ app.use(bodyParser.text({ limit: "50mb" }));
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
 
+app.set("socketIO", io);
+io.on("connection", WebSockets.connection);
+
+app.get("/", (req, res) => {
+  res.json({ status: httpStatus.OK, message: "thank you for your request" });
+});
 app.use("/api/v1/houses", houseRouter);
 app.use("/api/v1/users", userRouter);
 
@@ -57,7 +74,7 @@ mongoose
 
 const port = process.env.PORT || 9090;
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on PORT ${port}...`);
 });
 

@@ -1,4 +1,4 @@
-import TokenAuthenticator from "../helpers//TokenAuthenticator";
+import TokenAuthenticator from "../helpers/TokenAuthenticator";
 import Response from "../helpers/Response";
 import httpStatus from "http-status";
 import catchAsyncErr from "../helpers/catchAsyncError";
@@ -60,6 +60,34 @@ class UserController {
       res,
       "user deleted successfully",
       null,
+      httpStatus.OK
+    );
+  });
+
+  static createPreferences = catchAsyncErr(async (req, res, next) => {
+    const preferences = await userService.createPreferences(req);
+    return Response.successMessage(
+      res,
+      "preferences created successfuly!",
+      preferences,
+      httpStatus.CREATED
+    );
+  });
+
+  static updatePreferences = catchAsyncErr(async (req, res, next) => {
+    console.log("........................");
+    const data = await userService.updatePreferences(req);
+    if (!data)
+      return next(
+        new AppError(
+          httpStatus.NOT_FOUND,
+          "No preferences associated with the current user, please register preferences first"
+        )
+      );
+    return Response.successMessage(
+      res,
+      "preferences updated successfully",
+      data,
       httpStatus.OK
     );
   });
