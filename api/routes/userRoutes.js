@@ -11,6 +11,7 @@ router.post("/login", authController.login);
 router.use(protectedRoute);
 router.post("/verifyEmail", authController.verifyEmail);
 router.get("/resendOTP", authController.resendOTP);
+router.get("/me", authController.getMe);
 
 router
   .route("/preferences")

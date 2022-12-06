@@ -141,6 +141,10 @@ class AuthService {
     return token;
   }
 
+  static getUser = async (req) => {
+    return await User.findById(req.user._id);
+  };
+
   static login = async (req, next) => {
     const { email, password } = req.body;
 

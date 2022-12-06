@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
       unique: [true, "Phone must be unique"],
       required: [true, " Phone number is required"],
     },
+    profilePicture: String,
     role: {
       type: String,
       default: "student",

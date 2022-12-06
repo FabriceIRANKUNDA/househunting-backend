@@ -119,8 +119,6 @@ class AuthController {
     const token = TokenAuthenticator.tokenGenerator(data._doc);
     data.token = token;
 
-    //Victor
-
     await EmailTemplate.newUserEmail(req, data._doc, newPassword);
 
     return Response.successMessage(
@@ -131,16 +129,17 @@ class AuthController {
     );
   }
 
-  static async viewUsers(req, res) {
-    const users = await AuthService.viewUsers(req);
-
+  static getMe = catchAsyncError(async (req, res, next) => {
+    const user = await AuthService.getUser(req);
+    if (!user)
+      return next(new AppError(httpStatus.NOT_FOUND, "user not found"));
     return Response.successMessage(
       res,
-      "we have got All users successfully!",
-      users,
-      httpStatus.CREATED
+      "user retrieved successfully!",
+      user,
+      httpStatus.OK
     );
-  }
+  });
 
   static async updateProfile(req, res) {
     const profileData = await AuthService.updateProfile(req);

@@ -75,7 +75,6 @@ class UserController {
   });
 
   static updatePreferences = catchAsyncErr(async (req, res, next) => {
-    console.log("........................");
     const data = await userService.updatePreferences(req);
     if (!data)
       return next(
