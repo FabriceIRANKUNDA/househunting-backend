@@ -25,6 +25,10 @@ const preferenceSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "User",
     },
+    durationLimit: {
+      type: Number,
+      default: 1,
+    },
   },
   {
     toJSON: { virtuals: true },

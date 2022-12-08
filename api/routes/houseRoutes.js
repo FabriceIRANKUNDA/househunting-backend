@@ -5,6 +5,11 @@ import protectedRoute from "../middlewares/verifyToken";
 const router = express.Router();
 
 // router.use(protectedRoute);
+router.get(
+  "/preferred-houses",
+  protectedRoute,
+  houseController.getPreferredHouses
+);
 router
   .route("/")
   .get(houseController.getAllHouses)

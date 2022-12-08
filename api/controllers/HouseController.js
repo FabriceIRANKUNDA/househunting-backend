@@ -64,5 +64,17 @@ class HouseController {
       httpStatus.OK
     );
   });
+
+  static getPreferredHouses = catchAsyncErr(async (req, res, next) => {
+    const houseData = await HouseService.getPreferredHouse(req);
+    if (!houseData)
+      return next(new AppError(httpStatus.NOT_FOUND, "House not found"));
+    return Response.successMessage(
+      res,
+      "House fetched successfully",
+      houseData,
+      httpStatus.OK
+    );
+  });
 }
 export default HouseController;

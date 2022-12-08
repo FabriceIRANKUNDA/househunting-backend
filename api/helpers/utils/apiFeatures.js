@@ -6,7 +6,7 @@ class APIfeatures {
 
   filter() {
     // 1A) FILTERING QUERY STRING
-    const queryObj = { ...this.queryString };
+    const queryObj = { ...this.queryString, visible: true, available: true };
     const excludedFields = ["page", "limit", "sort", "fields"];
     excludedFields.forEach((el) => delete queryObj[el]);
     // 1B) ADVANCED FILTERING
@@ -23,7 +23,7 @@ class APIfeatures {
       const sortBy = this.queryString.sort.split(",").join(" ");
       this.query = this.query.sort(sortBy);
     } else {
-      this.query = this.query.sort("-createdOn");
+      this.query = this.query.sort("-updatedAt");
     }
     return this;
   }
