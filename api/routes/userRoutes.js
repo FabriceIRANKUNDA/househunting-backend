@@ -15,6 +15,7 @@ router.get("/me", authController.getMe);
 
 router
   .route("/preferences")
+  .get(userController.getPreferences)
   .post(userController.createPreferences)
   .patch(userController.updatePreferences);
 

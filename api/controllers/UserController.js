@@ -40,6 +40,18 @@ class UserController {
     );
   });
 
+  static getPreferences = catchAsyncErr(async (req, res, next) => {
+    const pref = await userService.getPreferences(req);
+    if (!pref)
+      return next(new AppError(httpStatus.NOT_FOUND, "preferences not found"));
+    return Response.successMessage(
+      res,
+      "preferences retrieved successfully!",
+      pref,
+      httpStatus.OK
+    );
+  });
+
   static updateUser = catchAsyncErr(async (req, res, next) => {
     const userData = await userService.updateUser(req);
     if (!userData)

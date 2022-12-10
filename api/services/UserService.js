@@ -21,6 +21,10 @@ class UserService {
     return await User.findById(req.params.id);
   };
 
+  static getPreferences = async (req) => {
+    return await Preference.findOne({ user: req.user?._id });
+  };
+
   static updateUser = async (req) => {
     return await User.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,

@@ -5,11 +5,7 @@ import protectedRoute from "../middlewares/verifyToken";
 const router = express.Router();
 
 router.use(protectedRoute);
-router.get(
-  "/preferred-houses",
-
-  houseController.getPreferredHouses
-);
+router.get("/preferred-houses", houseController.getPreferredHouses);
 
 router.get("/my-houses", houseController.getMyhouses);
 router.get("/:id/booked", houseController.markHouseAsBooked);
