@@ -65,6 +65,42 @@ class HouseController {
     );
   });
 
+  static deleteHousePermanent = catchAsyncErr(async (req, res, next) => {
+    const houseData = await HouseService.deleteHousePermanent(req);
+    if (!houseData)
+      return next(new AppError(httpStatus.NOT_FOUND, "House not found"));
+    return Response.successMessage(
+      res,
+      "House deleted successfully",
+      null,
+      httpStatus.OK
+    );
+  });
+
+  static getMyhouses = catchAsyncErr(async (req, res, next) => {
+    const houseData = await HouseService.getMyhouses(req);
+    if (!houseData)
+      return next(new AppError(httpStatus.NOT_FOUND, "House not found"));
+    return Response.successMessage(
+      res,
+      "House fetched successfully",
+      houseData,
+      httpStatus.OK
+    );
+  });
+
+  static markHouseAsBooked = catchAsyncErr(async (req, res, next) => {
+    const houseData = await HouseService.markHouseAsBooked(req);
+    if (!houseData)
+      return next(new AppError(httpStatus.NOT_FOUND, "House not found"));
+    return Response.successMessage(
+      res,
+      "House updated successfully",
+      houseData,
+      httpStatus.OK
+    );
+  });
+
   static getPreferredHouses = catchAsyncErr(async (req, res, next) => {
     const houseData = await HouseService.getPreferredHouse(req);
     if (!houseData)

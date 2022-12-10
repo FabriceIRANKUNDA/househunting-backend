@@ -10,6 +10,8 @@ class HouseService {
   };
 
   static getAllHouses = async (req) => {
+    req.query.visible = true;
+    req.query.available = true;
     const features = new APIfeatures(House.find(req.query))
       .filter()
       .sort()
@@ -30,7 +32,37 @@ class HouseService {
   };
 
   static deleteHouse = async (req) => {
+    return await House.findByIdAndUpdate(
+      req.params.id,
+      { visible: false },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+  };
+
+  static deleteHousePermanent = async (req) => {
     return await House.findByIdAndDelete(req.params.id);
+  };
+
+  static getMyhouses = async (req) => {
+    return await House.find({
+      postedBy: req.user?._id,
+      visible: true,
+      available: true,
+    });
+  };
+
+  static markHouseAsBooked = async (req) => {
+    return await House.findByIdAndUpdate(
+      req.params.id,
+      { available: false },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
   };
 
   static getPreferredHouse = async (req) => {
