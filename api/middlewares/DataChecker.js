@@ -30,15 +30,6 @@ class DataChecker {
     next();
   };
 
-  static istestCodeProvided(req, res, next) {
-    const { testCode } = req.body;
-    if (!testCode) {
-      Response.errorMessage(res, "No test code provided", 400);
-    } else {
-      next();
-    }
-  }
-
   static isPhoneProvided(req, res, next) {
     const { phone } = req.query;
     if (!phone) {
